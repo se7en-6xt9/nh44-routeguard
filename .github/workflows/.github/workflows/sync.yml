@@ -1,0 +1,26 @@
+name: Sync Fork Main
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync main with upstream
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Merge upstream main
+        run: |
+          git remote add upstream https://github.com/aryavsparihar/nh44-routeguard.git
+          git fetch upstream main
+          git merge --ff-only upstream/main
+          git push origin main
