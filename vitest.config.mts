@@ -7,7 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       // Same "@/..." imports as the app (tsconfig paths).
-      "@/": root,
+      "@": root,
       // "server-only" throws outside Next's server build. Tests run server
       // code directly, so they get an empty stand-in instead.
       "server-only": `${root}test/server-only-stub.ts`,
