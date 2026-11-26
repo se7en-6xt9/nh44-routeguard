@@ -79,7 +79,16 @@ describe("decide", () => {
     expect(decide(valley, run({ 4: { 0: 0.9 } }), unknown).decision).toBe("SEND");
     expect(decide(valley, run({ 6: { 0: 0.9 } }), unknown)).toMatchObject({ decision: "DIVERT", reason_code: "divert_store_valley" });
   });
+it("does not suggest RAIL for a valley destination, even when rail is open", () => {
+    const high = run({ 6: { 0: 0.9, 12: 0.9, 24: 0.9, 48: 0.9 } });
+    const valley = { ...lot, destination: "parimpora" as const };
 
+    expect(decide(valley, high, allOpen)).toMatchObject({
+      decision: "DIVERT",
+      reason_code: "divert_store_valley",
+      notes: [],
+    });
+  });
   it("HOLDs when there are no scores, rather than saying it is safe", () => {
     expect(decide(lot, { rows: [], run_at: null }, unknown)).toMatchObject({ decision: "HOLD", notes: ["no_scores"] });
   });
